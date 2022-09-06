@@ -15,6 +15,7 @@ set(CMAKE_AR ${TOOLPATH}ar.exe)
 set(CMAKE_OBJCOPY ${TOOLPATH}objcopy.exe)
 set(CMAKE_OBJDUMP ${TOOLPATH}objdump.exe)
 set(SIZE ${TOOLPATH}size.exe)
+set(NM ${TOOLPATH}nm.exe)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
 
@@ -65,8 +66,8 @@ add_executable(${PROJECT_NAME}.elf ${SOURCES} ${LINKER_SCRIPT})
 
 # 输出hex和bin
 set(HEX_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex)
-set(BIN_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bin)
+set(LST_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.lst)
 add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
         COMMAND ${CMAKE_OBJCOPY} -Oihex $<TARGET_FILE:${PROJECT_NAME}.elf> ${HEX_FILE}
-        COMMAND ${CMAKE_OBJCOPY} -Obinary $<TARGET_FILE:${PROJECT_NAME}.elf> ${BIN_FILE}
+        COMMAND ${CMAKE_OBJDUMP} --all-headers --demangle --disassemble $<TARGET_FILE:${PROJECT_NAME}.elf> > ${LST_FILE}
 )
