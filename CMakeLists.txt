@@ -49,7 +49,6 @@ file(GLOB_RECURSE SOURCES
                 "USER_CODE/*.c")
 
 # 链接参数
-set(LINKER_SCRIPT  ${CMAKE_SOURCE_DIR}/MC3172/MC3172.lds)
 add_link_options(-nostartfiles 
                 -nodefaultlibs 
                 -nostdlib
@@ -58,11 +57,13 @@ add_link_options(-nostartfiles
                 -Wl,-Map,${PROJECT_NAME}.map 
                 --specs=nano.specs 
                 --specs=nosys.specs)
-add_link_options(-T ${LINKER_SCRIPT})
+add_link_options(-T  ${CMAKE_SOURCE_DIR}/MC3172/MC3172.lds)
 
 # 编译可执行文件
-add_executable(${PROJECT_NAME}.elf ${SOURCES} ${LINKER_SCRIPT})
+add_executable(${PROJECT_NAME}.elf ${SOURCES})
 
+# 链接静态库
+target_link_libraries(${PROJECT_NAME}.elf gcc m)
 
 # 输出hex和bin
 set(HEX_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex)
